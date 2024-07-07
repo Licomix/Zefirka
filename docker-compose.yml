@@ -1,0 +1,33 @@
+
+services:
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: lavalink
+    restart: unless-stopped
+    environment:
+      - _JAVA_OPTIONS=-Xmx6G
+      - SERVER_PORT=2333
+      - LAVALINK_SERVER_PASSWORD=youshallnotpass
+    networks:
+      - lavalink_network
+    volumes:
+      - ./application.yml:/opt/Lavalink/application.yml
+      - ./plugins/:/opt/Lavalink/plugins/
+
+  bot:
+    build: ./
+    container_name: bot
+    restart: unless-stopped
+    environment:
+      - LAVA_HOST=lavalink
+      - LAVA_PORT=2333
+    networks:
+      - lavalink_network
+      - frontend_network
+
+networks:
+  lavalink_network:
+    name: lavalink_network
+
+  frontend_network:
+    driver: bridge
