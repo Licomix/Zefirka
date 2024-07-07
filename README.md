@@ -8,9 +8,9 @@
     Zefirka is a powerful and user-friendly music bot for Discord, designed to bring your server's music experience to the next level. Built with Kazagumo and Shoukaku, Zefirka ensures high-quality audio playback and seamless integration.
     <br />
     <br />
-    <a href="">Report Bug</a>
+    <a href="https://github.com/Licomix/Zefirka/issues">Report Bug</a>
     ·
-    <a href="">Request Feature</a>
+    <a href="https://github.com/Licomix/Zefirka/issues">Request Feature</a>
   </p>
 </p>
 
