@@ -36,6 +36,9 @@ If you like this repository, feel free to leave a star ⭐ to motivate me improv
 - ClientID `for loading slash commands.` [Discord Developers Portal](https://discord.com/developers/applications)
 - Spotify client ID `for Spotify support` [Click here to get](https://developer.spotify.com/dashboard/login)
 - Spotify client Secret `for Spotify support` [Click here to get](https://developer.spotify.com/dashboard/login)
+- Apple Music API Token `for Apple Music support`
+- Deezer Decryption Key `for Deezer support`
+- Yandex Music Access Token `for Yandex Music support`
 
 <!-- INSTALLATION GUIDE -->
 ## <img src="https://cdn.discordapp.com/emojis/814216203466965052.png" width="25px" height="25px">》Installation Guide
@@ -46,7 +49,8 @@ Clone the repo by running
 ```bash
 git clone https://github.com/Licomix/Zefirka.git
 ```
-### After cloning Fill all requirement in `.env` **(rename `.env.example` to `.env`)**, then run
+### After cloning Fill all requirement in `.env` **(rename `.env.example` to `.env`)**
+### Fill your api tokens in application.yml, then run
 ```bash
 docker compose up -d
 ```

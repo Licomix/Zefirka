@@ -3,8 +3,6 @@
     "@discordjs/voice": "^0.17.0",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
-    "kazagumo": "^3.0.5",
-    "kazagumo-apple": "^2.0.2",
-    "kazagumo-spotify": "^2.1.0"
+    "kazagumo": "^3.0.5"
   }
 }

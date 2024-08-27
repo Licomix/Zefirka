@@ -32,23 +32,6 @@ const Nodes = [
 
 const kazagumo = new Kazagumo(
 {
-    plugins: [
-        new Spotify({
-            clientId: process.env.spotifyClientId,
-            clientSecret: process.env.spotifyClientSecrets,
-            playlistPageLimit: 5, // optional ( 100 tracks per page )
-            albumPageLimit: 2, // optional ( 50 tracks per page )
-            searchLimit: 7, // optional ( track search limit. Max 50 )
-            searchMarket: 'RU', // optional || default: US ( Enter the country you live in. [ Can only be of 2 letters. For eg: US, IN, EN ] )//
-        }),
-        new Apple({
-            countryCode: "us", // Default is "us"
-            imageWidth: 600, // Default is 600
-            imageHeight: 900 // Default is 900
-        }),
-
-    ],
-
     defaultSearchEngine: "soundcloud",
     defaultYoutubeThumbnail: "mqdefault",
     send: (guildId, payload) => {
