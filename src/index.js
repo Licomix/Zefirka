@@ -2,8 +2,6 @@ const { Client, GatewayIntentBits, EmbedBuilder, Collection, ActivityType } = re
 const fs = require('fs');
 const { Connectors } = require("shoukaku");
 const { Kazagumo } = require("kazagumo");
-const Spotify = require('kazagumo-spotify');
-const Apple = require('kazagumo-apple');
 
 const client = new Client({ intents: [
     GatewayIntentBits.Guilds,
