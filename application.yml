@@ -1,6 +1,6 @@
 server: # REST and WS server
   port: 2333
-  address: lavalink
+  address: 0.0.0.0
   http2:
     enabled: false # Whether to enable HTTP/2 support
 plugins:
@@ -13,8 +13,13 @@ plugins:
     # Clients are queried in the order they are given (so the first client is queried first and so on...)
     clients:
       - MUSIC
-      - ANDROID
+      - ANDROID_TESTSUITE
       - WEB
+      - ANDROID_MUSIC
+      - TVHTML5EMBEDDED
+      - ANDROID_LITE
+      - MEDIA_CONNECT
+      - IOS
 
     # You can configure individual clients with the following.
     # Any options or clients left unspecified will use their default values
@@ -28,16 +33,19 @@ plugins:
     # ---------------- WARNING ----------------
     WEB: # names are specified as they are written below under "Available Clients".
       # This will disable using the WEB client for video playback.
-      playback: false
+      playback: true
+      videoLoading: true
+      playlistLoading: true
+      searching: true
     TVHTML5EMBEDDED:
       # The below config disables everything except playback for this client.
-      playlistLoading: false # Disables loading of playlists and mixes for this client.
-      videoLoading: false # Disables loading of videos for this client (playback is still allowed).
-      searching: false # Disables the ability to search for videos for this client.
+      playlistLoading: true # Disables loading of playlists and mixes for this client.
+      videoLoading: true # Disables loading of videos for this client (playback is still allowed).
+      searching: true # Disables the ability to search for videos for this client.
 lavalink:
   plugins:
     # Replace VERSION with the current version as shown by the Releases tab or a long commit hash for snapshots.
-    - dependency: "dev.lavalink.youtube:youtube-plugin:1.4.0"
+    - dependency: "dev.lavalink.youtube:youtube-plugin:1.7.2"
       snapshot: false # Set to true if you want to use a snapshot version.
 
 #    - dependency: "com.github.example:example-plugin:1.0.0" # required, the coordinates of your plugin
@@ -80,12 +88,12 @@ lavalink:
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
     gc-warnings: true
-    #ratelimit:
+    ratelimit:
       #ipBlocks: ["1.0.0.0/8", "..."] # list of ip blocks
       #excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink
-      #strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
-      #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
-      #retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
+      strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
+      searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
+      retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
     #youtubeConfig: # Required for avoiding all age restrictions by YouTube, some restricted videos still can be played without.
       #email: "" # Email of Google account
       #password: "" # Password of Google account
