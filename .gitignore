@@ -132,3 +132,4 @@ dist
 # Custom Files/Directories
 plugins
 .DS_Store
+.idea
