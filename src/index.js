@@ -22,8 +22,8 @@ const commandFolders = fs.readdirSync("./src/commands");
 const Nodes = [
     {
         name: 'owo', // Not necessarily
-        url: 'lavalink:2333', // ip adress : port
-        auth: 'youshallnotpass', // Passsword auth
+        url: 'lavalink:2333', // ip address : port
+        auth: 'youshallnotpass', // Password auth
         secure: false, // Secure server
     }
 ];
@@ -80,7 +80,7 @@ kazagumo.on('playerEnd', async (player) => {
                 .setDescription('I left the voice channel because there were no participants.');
 
             const textChannel = client.channels.cache.get(player.textId);
-            if (textChannel) textChannel.send({ embeds: [embed] });
+            if (textChannel) await textChannel.send({ embeds: [embed] });
         }
     }, 60000);
 
@@ -94,7 +94,7 @@ kazagumo.on('playerEmpty', async (player) => {
             .setDescription('The queue is finished.');
 
         const channel = client.channels.cache.get(player.textId);
-        if (channel) channel.send({ embeds: [embed] });
+        if (channel) await channel.send({ embeds: [embed] });
         setTimeout(async () => {
             if (!player.queue.length) {
                 await player.destroy();
@@ -104,7 +104,7 @@ kazagumo.on('playerEmpty', async (player) => {
                     .setDescription('I left the voice channel due to a lack of activity');
 
                 const textChannel = client.channels.cache.get(player.textId);
-                if (textChannel) textChannel.send({ embeds: [embed] });
+                if (textChannel) await textChannel.send({ embeds: [embed] });
             }
         }, 60000);
     }
@@ -134,6 +134,21 @@ function formatTime(milliseconds) {
     return `${hoursStr}:${minutesStr}:${secondsStr}`;
 }
 
+async function pickPresence () {
+    try {
+        await client.user.setPresence({
+            activities: [
+                {
+                    name: "Enjoying a life of serenity",
+                    type: ActivityType.Listening,
+                },
+            ],
+            status: 'online',
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 (async () => {
     for (const file of functions) {
@@ -142,5 +157,5 @@ function formatTime(milliseconds) {
     client.handleEvents(eventFiles, "./src/events");
     client.handleCommands(commandFolders, "./src/commands");
     client.kazagumo = kazagumo;
-    client.login(process.env.token)
+    await client.login(process.env.token)
 })();

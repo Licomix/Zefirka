@@ -5,24 +5,22 @@ module.exports = {
     once: true,
     async execute(client) {
         console.log('Ready!');
-        // await pickPresence();
+        await pickPresence();
 
-        // async function pickPresence () {
-        //     const option = Math.floor(Math.random() * statusArray.length);
-
-        //     try {
-        //         await client.user.setPresence({
-        //             activities: [
-        //                 {
-        //                     name: statusArray[option],
-        //                     type: ActivityType.Listening,
-        //                 },
-        //             ],
-        //             status: 'dnd',
-        //         })
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        // }
+        async function pickPresence () {
+            try {
+                await client.user.setPresence({
+                    activities: [
+                        {
+                            name: "Enjoying a life of serenity",
+                            type: ActivityType.Listening,
+                        },
+                    ],
+                    status: 'online',
+                })
+            } catch (error) {
+                console.error(error);
+            }
+        }
     },
 };

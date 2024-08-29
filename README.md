@@ -1,9 +1,10 @@
 <!-- PROJECT LOGO -->
 <br />
-<p align="center">
-
-  <h2 align="center">Zefirka</h2>
-
+<div style="text-align: center;">
+  <h2>Zefirka</h2>
+  <p align="center">
+    <img src=".github/assets/shiro.png" alt="Shiro from Sewayaki Kitsune No Senko-San">
+  </p>
   <p align="center">
     Zefirka is a powerful and user-friendly music bot for Discord, designed to bring your server's music experience to the next level. Built with Kazagumo and Shoukaku, Zefirka ensures high-quality audio playback and seamless integration.
     <br />
@@ -12,7 +13,8 @@
     ·
     <a href="https://github.com/Licomix/Zefirka/issues">Request Feature</a>
   </p>
-</p>
+</div>
+
 
 <!-- NOTICE -->
 ### <img src="https://cdn.discordapp.com/emojis/1055803759831294013.png" width="20px" height="20px"> 》Notice 
@@ -22,11 +24,12 @@ If you like this repository, feel free to leave a star ⭐ to motivate me improv
 
 
 [![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=Licomix&repo=Zefirka&theme=tokyonight)](https://github.com/Licomix/Zefirka)
-## <img src="https://cdn.discordapp.com/emojis/852881450667081728.gif" width="20px" height="20px">》Feature
+## <img src="https://cdn.discordapp.com/emojis/852881450667081728.gif" width="20px" height="20px">》Features
 - [x] Slash Commands 
 - [x] Music Commands
 - [x] Easy to use
 - [x] Customizable
+- [x] Supports many music services
 
 <!-- REQUIREMENTS -->
 ## <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" width="25px" height="25px">》Requirements
