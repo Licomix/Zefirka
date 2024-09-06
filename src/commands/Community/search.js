@@ -46,7 +46,7 @@ module.exports = {
         const tracks = result.tracks.slice(0, 5); // Get top 5 results
 
         const embed = {
-            color: 0x5865F2,
+            color: 0x00ff00,
             title: 'Search Results',
             description: tracks.map((track, i) => `${i + 1}. ${track.title}`).join('\n'),
             footer: { text: 'Select a song using the buttons below.' }
