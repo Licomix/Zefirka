@@ -3,11 +3,11 @@ const {SlashCommandBuilder, EmbedBuilder} = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('play-ext')
-        .setDescription('Enhanced play command')
+        .setDescription('Enhanced play command.')
         .setDMPermission(false)
         .addStringOption(option =>
             option.setName('source')
-                .setDescription('Select playback source')
+                .setDescription('Select playback source.')
                 .setRequired(true)
                 .addChoices(
                     { name: 'Youtube', value: 'youtube' },
@@ -50,13 +50,13 @@ module.exports = {
             if (result.type === "PLAYLIST"){
                 const loadingEmbed = new EmbedBuilder()
                     .setColor(0x00ff00)
-                    .setDescription(`**Added to the queue: **${result.playlistName}`)
+                    .setDescription(`**Added to the queue: **${result.playlistName}.`)
                 await interaction.followUp({ embeds: [loadingEmbed]});
             }
             else{
                 const loadingEmbed = new EmbedBuilder()
                     .setColor(0x00ff00)
-                    .setDescription(`**Added to the queue: ** ${result.tracks[0].title}`)
+                    .setDescription(`**Added to the queue: ** ${result.tracks[0].title}.`)
                 await interaction.followUp({ embeds: [loadingEmbed]});
             }
         }

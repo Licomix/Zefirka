@@ -49,13 +49,13 @@ module.exports = {
         if (result.type === "PLAYLIST") {
             const loadingEmbed = {
                 color: 0x00ff00,
-                description: `**Added to queue:** ${result.playlistName}`
+                description: `**Added to queue:** ${result.playlistName}.`
             };
             await interaction.followUp({ embeds: [loadingEmbed] });
         } else {
             const loadingEmbed = {
                 color: 0x00ff00,
-                description: `**Added to queue:** ${result.tracks[0].title}`
+                description: `**Added to queue:** ${result.tracks[0].title}.`
             };
             await interaction.followUp({ embeds: [loadingEmbed] });
         }

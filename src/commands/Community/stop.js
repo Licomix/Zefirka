@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("stop")
-        .setDescription("Stop playback"),
+        .setDescription("Stop playback."),
     async execute(interaction, client) {
         await interaction.deferReply();
 

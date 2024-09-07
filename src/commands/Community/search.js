@@ -8,7 +8,7 @@ module.exports = {
         .addStringOption(option =>
             option
                 .setName('query')
-                .setDescription('Search query')
+                .setDescription('Search query.')
                 .setRequired(true)),
     async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: false });
@@ -79,7 +79,7 @@ module.exports = {
 
             const loadingEmbed = {
                 color: 0x00ff00,
-                description: `**Added to queue:** ${selectedTrack.title}`
+                description: `**Added to queue:** ${selectedTrack.title}.`
             };
 
             await i.update({ embeds: [loadingEmbed], components: [] });

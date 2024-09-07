@@ -12,7 +12,7 @@ module.exports = {
                 await client.user.setPresence({
                     activities: [
                         {
-                            name: "Enjoying a life of serenity",
+                            name: "Enjoying a life of serenity.",
                             type: ActivityType.Listening,
                         },
                     ],

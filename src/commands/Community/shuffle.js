@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('shuffle')
-        .setDescription('Shuffles all songs in the queue'),
+        .setDescription('Shuffles all songs in the queue.'),
 
     async execute(interaction, client) {
         await interaction.deferReply();

@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('queue')
-        .setDescription('View the upcoming songs'),
+        .setDescription('View the upcoming songs.'),
 
     async execute(interaction, client) {
         await interaction.deferReply();

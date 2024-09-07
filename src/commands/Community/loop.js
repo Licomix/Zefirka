@@ -3,16 +3,16 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('loop')
-        .setDescription('Set loop mode')
+        .setDescription('Set loop mode.')
         .setDMPermission(false)
         .addStringOption(option =>
             option.setName('mode')
-                .setDescription('Loop mode')
+                .setDescription('Loop mode.')
                 .setRequired(true)
                 .addChoices(
-                    { name: 'Off', value: 'none' },
-                    { name: 'Track', value: 'track' },
-                    { name: 'Queue', value: 'queue' },
+                    { name: 'Off.', value: 'none' },
+                    { name: 'Track.', value: 'track' },
+                    { name: 'Queue.', value: 'queue' },
                 )),
     async execute(interaction, client) {
         await interaction.deferReply();
@@ -30,7 +30,7 @@ module.exports = {
         let repeatMode = interaction.options.getString('mode');
         try {
             await player.setLoop(repeatMode);
-            await interaction.followUp({ content: `Loop mode set to ${repeatMode}` });
+            await interaction.followUp({ content: `Loop mode set to ${repeatMode}.` });
         } catch (error) {
             await interaction.followUp({ content: 'Oops, something went wrong. Please try again.' });
             console.error(error);

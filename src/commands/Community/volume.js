@@ -3,11 +3,11 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('volume')
-        .setDescription('Set the volume')
+        .setDescription('Set the volume.')
         .addIntegerOption(option =>
             option
                 .setName('volume')
-                .setDescription('Desired volume')
+                .setDescription('Desired volume.')
                 .setRequired(true)
                 .setMinValue(0)
                 .setMaxValue(200))
@@ -28,7 +28,7 @@ module.exports = {
 
         try {
             await player.setVolume(volume);
-            await interaction.followUp({ content: `Volume changed to ${volume}` });
+            await interaction.followUp({ content: `Volume changed to ${volume}.` });
         } catch (error) {
             await interaction.followUp("Oops, something went wrong. Please try again.");
             console.error(error);

@@ -5,7 +5,7 @@ services:
     container_name: lavalink
     restart: unless-stopped
     environment:
-      - _JAVA_OPTIONS=-Xmx6G
+      - _JAVA_OPTIONS=-Xmx3G
       - SERVER_PORT=2333
       - LAVALINK_SERVER_PASSWORD=youshallnotpass
     networks:

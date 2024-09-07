@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('skip')
-        .setDescription('Skips the current music')
+        .setDescription('Skips the current music.')
         .setDMPermission(false),
 
     async execute(interaction, client) {
