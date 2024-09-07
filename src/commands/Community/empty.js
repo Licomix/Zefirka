@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const voice = require('@discordjs/voice');
 
 module.exports = {
     data: new SlashCommandBuilder()
