@@ -28,12 +28,15 @@ export default {
 
         if (!voiceChannel) return interaction.followUp({ content: 'You are not in a voice channel!' });
 
+        const playerData = new Map<string, any>();
+
         let player = await kazagumo.createPlayer({
             guildId: interaction.guildId!,
             textId: interaction.channelId!,
             voiceId: voiceChannel.id,
             volume: 100,
             deaf: true,
+            data: playerData
         });
 
         const botVoiceChannel = player.voiceId;
@@ -59,7 +62,7 @@ export default {
         }
 
         const loadingEmbed = {
-            color: 0x00ff00,
+            color: 0xA020F0,
             description: result.type === "PLAYLIST"
                 ? `**Added to queue:** ${result.playlistName}.`
                 : `**Added to queue:** ${result.tracks[0].title}.`

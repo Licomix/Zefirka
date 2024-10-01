@@ -15,7 +15,7 @@ export class Bot {
     public commands = new Collection<string, Command>();
     public slashCommands = new Array<ApplicationCommandDataResolvable>();
     public slashCommandsMap = new Collection<string, Command>();
-    public manager: Kazagumo;  // Добавляем поле manager для Kazagumo
+    public manager: Kazagumo;
     private readonly token: string;
 
 
@@ -40,14 +40,13 @@ export class Bot {
             console.log(`${this.client.user!.username} ready!`);
 
             this.registerSlashCommands();
-            this.registerEvents();
+            this.registerKazagumoEvents();
+            this.registerDiscordEvents()
             this.pickDefaultPresence();
         });
 
         this.client.on("warn", (info) => console.log(info));
         this.client.on("error", console.error);
-
-        this.onInteractionCreate();
     }
 
     // Private function for registering slash commands
@@ -67,12 +66,12 @@ export class Bot {
     }
 
     // Private function for register Kazagumo events
-    private async registerEvents() {
-        const eventFiles = readdirSync(join(__dirname, "..", "events")).filter((file) => !file.endsWith(".map"));
+    private async registerKazagumoEvents() {
+        const eventFiles = readdirSync(join(__dirname, "..", "events/kazagumo")).filter((file) => !file.endsWith(".map"));
 
         for (const file of eventFiles) {
             try {
-                const event = await import(join(__dirname, "..", "events", `${file}`));
+                const event = await import(join(__dirname, "..", "events/kazagumo", `${file}`));
                 this.manager.on(event.default.name, async (...args) => {
                     event.default.execute(...args);
                 });
@@ -94,25 +93,30 @@ export class Bot {
             });
     }
 
-    // Private function for handle Interactions
-    private async onInteractionCreate() {
-        this.client.on(Events.InteractionCreate, async (interaction: Interaction): Promise<any> => {
-            if (!interaction.isChatInputCommand()) return;
-
-            const command = this.slashCommandsMap.get(interaction.commandName);
-
-            if (!command) return;
-
+    // Private function for register Discord Events
+    private async registerDiscordEvents() {
+        const eventFiles = readdirSync(join(__dirname, "..", "events/discord")).filter((file) => file.endsWith(".js") || file.endsWith(".ts"));
+    
+        for (const file of eventFiles) {
             try {
-                await command.execute(interaction, this.client);
-            } catch (error: any) {
-                console.error(error);
-                await interaction.followUp({
-                    content: 'An unknown error occurred while executing the command!',
-                    ephemeral: true,
+                const event = await import(join(__dirname, "..", "events/discord", `${file}`));
+    
+                if (!event.default || typeof event.default.execute !== 'function') {
+                    console.warn(`Event ${file} does not export a valid execute function.`);
+                    continue;
+                }
+    
+                this.client.on(event.default.name, async (...args) => {
+                    try {
+                        await event.default.execute(...args);
+                    } catch (error) {
+                        console.error(`Error executing event ${event.default.name}:`, error);
+                    }
                 });
+            } catch (error) {
+                console.error(`Error loading event ${file}:`, error);
             }
-        });
+        }
     }
 
     // Public function for picking default rich presence
@@ -123,7 +127,8 @@ export class Bot {
                     activities: [
                         {
                             name: "Enjoying a life of serenity",
-                            type: 2, // Listening
+                            state: "Enjoying a life of serenity",
+                            type: 4, // Custom
                         },
                     ],
                     status: "online",

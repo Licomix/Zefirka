@@ -1,0 +1,68 @@
+import {Events, GuildMember, Interaction} from "discord.js";
+import { bot } from "../..";
+
+
+export default {
+    name: Events.InteractionCreate,
+    async execute(interaction: Interaction) {
+        if (!interaction.isButton()) return;
+
+        const kazagumo = bot.manager;
+        const player = kazagumo.players.get(interaction.guildId!);
+        const member = interaction.member as GuildMember;
+        const voiceChannel = member.voice.channel;
+
+        if (!voiceChannel) return interaction.reply({ content: 'You are not in a voice channel!' });
+
+        if (!player) return interaction.reply({ content: 'Nothing is playing!' });
+
+        const botVoiceChannel = player.voiceId;
+        if (voiceChannel.id !== botVoiceChannel) return interaction.reply({ content: 'I am in a different voice channel!' });
+
+        switch(interaction.customId){
+            case 'stop':
+                await player.destroy();
+                await interaction.reply({ content: 'Playback stopped. Hope you enjoyed!' });
+                break;
+            
+            case 'back':
+                if (!player.getPrevious()){
+                    await interaction.reply({content: 'Nothing happened!'});
+                    break;
+                }
+                player.play(player.getPrevious(true));
+                break;
+            
+            case 'pauseresu':
+                if (player.paused) {
+                    player.pause(false);
+                    interaction.reply({ content: 'Playback resumed!' });
+                } else {
+                    player.pause(true);
+                    interaction.reply({ content: 'Playback paused!' });
+                }
+                break;
+
+            case 'skip':
+                player.skip();
+                await interaction.reply({ content: 'Current music skipped!' });
+                break;
+
+            case 'loop':
+                switch (player.loop) {
+                    case 'none':
+                        player.setLoop('track');
+                        await interaction.reply({ content: `Loop mode set to track` });
+                        break;
+                    case 'track':
+                        player.setLoop('queue');
+                        await interaction.reply({ content: `Loop mode set to queue` });
+                        break;
+                    case 'queue':
+                        player.setLoop('none');
+                        await interaction.reply({ content: `Loop mode set to none` });
+                        break;
+                }
+        }
+    }
+}

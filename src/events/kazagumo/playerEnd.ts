@@ -1,6 +1,6 @@
 import {Events, KazagumoPlayer, KazagumoTrack} from "kazagumo";
 import {EmbedBuilder, TextChannel, VoiceChannel} from "discord.js";
-import { bot } from "../index";
+import { bot } from "../../index";
 
 
 export default {

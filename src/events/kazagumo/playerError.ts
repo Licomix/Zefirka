@@ -1,8 +1,9 @@
 import {Events, KazagumoError, KazagumoPlayer, KazagumoTrack} from "kazagumo";
 
+
 export default {
-    name: Events.PlayerStart,
+    name: Events.PlayerError,
     async execute(player: KazagumoPlayer, track: KazagumoTrack, err: KazagumoError) {
-        console.log(`Resolve error for track ${track.title} in guild ${player.guildId}, error: ${err}`);
+        console.log(`Player error in guild ${player.guildId}, error: ${err}`);
     }
 }
