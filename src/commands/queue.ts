@@ -1,5 +1,6 @@
-import {CommandInteraction, EmbedBuilder, GuildMember, InteractionContextType, SlashCommandBuilder} from "discord.js";
+import {ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CommandInteraction, EmbedBuilder, GuildMember, Interaction, InteractionContextType, SlashCommandBuilder} from "discord.js";
 import { bot } from "../index"
+import { KazagumoPlayer, KazagumoQueue, } from "kazagumo";
 
 
 export default {
@@ -20,45 +21,82 @@ export default {
 
         if (!player) return interaction.followUp({ content: 'Nothing is playing!' });
 
-        if (!player.queue) return interaction.followUp({ content: "Nothing in queue!"})
+        if (!player.queue) return interaction.followUp({ content: "Nothing in queue!" });
 
-        const botVoiceChannel = player.voiceId;
-        if (voiceChannel.id !== botVoiceChannel) return interaction.followUp({ content: 'I am in a different voice channel!' });
+        async function createPageEmbed(player: KazagumoPlayer, queue: KazagumoQueue, page: number): Promise<EmbedBuilder> {
+            const pageSize = 10;
+            const startIndex = (page - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
 
-        const tracks = player.queue.slice(0, 10);
+            const tracks = player.queue.slice(startIndex, endIndex);
+            const embed = new EmbedBuilder()
+                .setColor(0x0000ff)
+                .setTitle("Current Queue of Tracks")
+                .setDescription(`**Now playing:**\n${player.queue.current!.title}\n\n**Up next:**`)
+                .setThumbnail(player.queue.current!.thumbnail as string);
 
-        const embed = {
-            color: 0x0000ff,
-            title: "Current Queue of Tracks",
-            description: `**Now playing:**\n${player.queue.current!.title}\n\n**Up next:\n\n**`,
-            thumbnail: {
-                url: player.queue.current!.thumbnail as string
-            },
-            fields: [],
+            let i = startIndex + 1;
+
+            for (const track of tracks) {
+                let trackTitle = track.title.substring(0, 35);
+                // let formattedTitle = `${trackTitle}${track.title.length > 50 ? '...' : ''}`;
+
+                embed.addFields(
+                    { name: `${i}. ${track.author}`, value: `${trackTitle}`, inline: false }
+                );
+
+                i++;
+            }
+            return embed;
+        }
+
+        let currentPage = 1;
+
+        const embed = await createPageEmbed(player, player.queue, currentPage);
+
+        const totalPages = Math.ceil(player.queue.length / 10);
+
+        const row = new ActionRowBuilder<ButtonBuilder>()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('prev')
+                    .setLabel('⬅️ Previous')
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(currentPage === 1), 
+                new ButtonBuilder()
+                    .setCustomId('next')
+                    .setLabel('Next ➡️')
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(currentPage >= totalPages), 
+            );
+
+        const message = await interaction.followUp({ embeds: [embed], components: [row] });
+
+        const filter = (interaction: Interaction) => {
+            return interaction.isButton() && interaction.user.id === member.id;
         };
 
-        let i = 1;
-        let tracksDescription = '';
+        const collector = message.createMessageComponentCollector({ filter, time: 60000 });
 
-        for (const track of tracks) {
-            let trackTitle = track.title.substring(0, 35);
-            let formattedTitle = `${i}. ${trackTitle}${track.title.length > 35 ? '...' : ''}`;
-
-            if (i % 2 === 0) {
-                formattedTitle = `**${formattedTitle}**`;
-            } else {
-                formattedTitle = `_${formattedTitle}_`;
+        collector.on('collect', async (interaction) => {
+            if (interaction.customId === "prev" && currentPage > 1) {
+                currentPage -= 1;
+            } else if (interaction.customId === "next" && currentPage < totalPages) {
+                currentPage += 1;
             }
 
-            tracksDescription += `${formattedTitle}\n`;
+            const newPageEmbed = await createPageEmbed(player, player.queue, currentPage);
+            
+            row.components[0].setDisabled(currentPage === 1); 
+            row.components[1].setDisabled(currentPage >= totalPages);
 
-            i++;
-        }
+            await interaction.update({ embeds: [newPageEmbed], components: [row] });
+        });
 
-        if (tracksDescription) {
-            embed.description +=  tracksDescription;
-        }
+        collector.on('end', () => {
+            row.components.forEach(button => button.setDisabled(true));
+            message.edit({ components: [row] });
+        });
 
-        return await interaction.followUp({ embeds: [embed] });
     }
 };
