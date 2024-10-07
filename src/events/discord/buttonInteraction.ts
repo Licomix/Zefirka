@@ -12,19 +12,19 @@ export default {
         const member = interaction.member as GuildMember;
         const voiceChannel = member.voice.channel;
 
-        if (!voiceChannel) return interaction.reply({ content: 'You are not in a voice channel!' });
+        if (!voiceChannel) return await interaction.reply({ content: 'You are not in a voice channel!' });
 
-        if (!player) return interaction.reply({ content: 'Nothing is playing!' });
+        if (!player) return await interaction.reply({ content: 'Nothing is playing!' });
 
         const botVoiceChannel = player.voiceId;
-        if (voiceChannel.id !== botVoiceChannel) return interaction.reply({ content: 'I am in a different voice channel!' });
+        if (voiceChannel.id !== botVoiceChannel) return await interaction.reply({ content: 'I am in a different voice channel!' });
 
         switch(interaction.customId){
             case 'stop':
                 await player.destroy();
                 await interaction.reply({ content: 'Playback stopped. Hope you enjoyed!' });
                 break;
-            
+
             case 'back':
                 if (!player.getPrevious()){
                     await interaction.reply({content: 'Nothing happened!'});
@@ -32,14 +32,14 @@ export default {
                 }
                 player.play(player.getPrevious(true));
                 break;
-            
+
             case 'pauseresu':
                 if (player.paused) {
                     player.pause(false);
-                    interaction.reply({ content: 'Playback resumed!' });
+                    await interaction.reply({ content: 'Playback resumed!' });
                 } else {
                     player.pause(true);
-                    interaction.reply({ content: 'Playback paused!' });
+                    await interaction.reply({ content: 'Playback paused!' });
                 }
                 break;
 
