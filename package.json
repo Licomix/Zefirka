@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node ."
+    "start": "node script/delete.js && npm run build && node ."
   },
   "keywords": [],
   "author": "jellytyan",
@@ -14,7 +14,8 @@
   "dependencies": {
     "discord.js": "^14.16.1",
     "dotenv": "^16.4.5",
-    "kazagumo": "^3.2.1"
+    "kazagumo": "^3.2.1",
+    "url": "^0.11.4"
   },
   "devDependencies": {
     "@types/node": "^22.5.4",

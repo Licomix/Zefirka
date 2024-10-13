@@ -1,4 +1,4 @@
-import {CommandInteraction, GuildMember, InteractionContextType, SlashCommandBuilder} from "discord.js";
+import {CommandInteraction, GuildMember, InteractionContextType, SlashCommandBuilder, Message} from "discord.js";
 import { bot } from "../index"
 
 
@@ -24,6 +24,15 @@ export default {
         if (voiceChannel.id !== botVoiceChannel) return interaction.followUp({ content: 'I am in a different voice channel!' });
 
         try {
+            const lastMessage = player.data.get("message") as Message;
+            if (lastMessage) {
+                try {
+                    await lastMessage.delete();
+                } catch (error) {
+                    console.error('Error deleting "Now Playing" message:', error);
+                }
+                player.data.delete("message");
+            }
             await player.destroy();
             await interaction.followUp({ content: 'Playback stopped. Hope you enjoyed!' });
         } catch (error) {
