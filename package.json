@@ -1,8 +1,25 @@
 {
+  "name": "zefirka",
+  "version": "0.5.2",
+  "description": "Zefirka is a powerful and user-friendly music bot for Discord, designed to bring your server's music experience to the next level. Built with Kazagumo and Shoukaku",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "jellytyan",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^14.16.1",
     "dotenv": "^16.4.5",
-    "kazagumo": "3.1.2",
-    "shoukaku": "4.0.1"
+    "kazagumo": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.0"
   }
 }

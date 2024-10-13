@@ -30,10 +30,11 @@ If you like this repository, feel free to leave a star ⭐ to motivate me improv
 - [x] Easy to use
 - [x] Customizable
 - [x] Supports many music services
+- [x] Fast as flash
 
 <!-- REQUIREMENTS -->
 ## <img src="https://cdn.discordapp.com/emojis/1009754836314628146.gif" width="25px" height="25px">》Requirements
-- NodeJs v17+
+- NodeJS v17+
 - Java v13+ for lavalink server.
 - Discord Token. Get it from [Discord Developers Portal](https://discord.com/developers/applications)
 - ClientID `for loading slash commands.` [Discord Developers Portal](https://discord.com/developers/applications)
@@ -52,29 +53,25 @@ Clone the repo by running
 ```bash
 git clone https://github.com/Licomix/Zefirka.git
 ```
-### After cloning Fill all requirement in `.env` **(rename `.env.example` to `.env`)**
-### Fill your api tokens in application.yml, then run
+### <img src="https://cdn.discordapp.com/emojis/1028680849195020308.png" width="15px" height="15px"> Configuration
+- Fill your lavalink info in `config/lavalink.ts` (only if you have your own lavalink)<br>
+- Change basic bot configurations in `config/playback.ts` (optional)
+- Fill your tokens in `applitication.yml`
+### <img src="https://cdn.discordapp.com/emojis/1028680849195020308.png" width="15px" height="15px"> Start bot
+For start bot just use:
 ```bash
 docker compose up -d
 ```
-### All done!
-
-### <img src="https://cdn.discordapp.com/emojis/1028680849195020308.png" width="15px" height="15px"> Installing on your own
-Clone the repo by running
-```bash
-git clone https://github.com/Licomix/Zefirka.git
-```
-Install all dependencies
+### or
+if you use your lavalink server:
 ```bash
 npm install
+npm run build
 ```
-### Fill all requirement in `.env` **(rename `.env.example` to `.env`)**
-### Then in src/index.js on line 24 change Lavalink server info to yours
-Now you can start bot by running
+And start bot:
 ```bash
-node src/index.js
+npm run start
 ```
-
 <!-- SUPPORT SERVER -->
 ## <img src="https://cdn.discordapp.com/emojis/1036083490292244493.png" width="15px" height="15px">》Support Server
 [![DiscordBanner](https://invidget.switchblade.xyz/77keb7smna)](https://discord.gg/77keb7smna)

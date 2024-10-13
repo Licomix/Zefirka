@@ -1,15 +1,14 @@
-FROM node:latest
+FROM node:alpine
 
-# Create the directory!
 RUN mkdir -p /usr/src/bot
 WORKDIR /usr/src/bot
 
-# Copy and Install our bot
-COPY package.json /usr/src/bot
+COPY package*.json ./
+
 RUN npm install
 
-# Our precious bot
-COPY . /usr/src/bot
+COPY . .
 
-# Start me!
-CMD ["node", "src/index.js"]
+RUN npm run build
+
+CMD ["npm", "start"]
