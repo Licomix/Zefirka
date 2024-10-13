@@ -9,13 +9,13 @@ export default {
         .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option
-                .setName('url')
+                .setName('song')
                 .setDescription('Music link or search query')
                 .setRequired(true)),
 
     async execute(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply();
-        const query = interaction.options.getString('url', true);
+        const query = interaction.options.getString('song', true);
 
         const kazagumo = bot.manager;
         const player = kazagumo.players.get(interaction.guildId!);
