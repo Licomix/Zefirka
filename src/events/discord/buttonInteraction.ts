@@ -1,4 +1,4 @@
-import {Events, GuildMember, Interaction} from "discord.js";
+import {Events, GuildMember, Interaction, Message} from "discord.js";
 import { bot } from "../..";
 
 
@@ -21,6 +21,15 @@ export default {
 
         switch(interaction.customId){
             case 'stop':
+                const lastMessage = player.data.get("message") as Message;
+                if (lastMessage) {
+                    try {
+                        await lastMessage.delete();
+                    } catch (error) {
+                        console.error('Error deleting "Now Playing" message:', error);
+                    }
+                    player.data.delete("message");
+                }
                 await player.destroy();
                 await interaction.reply({ content: 'Playback stopped. Hope you enjoyed!' });
                 break;

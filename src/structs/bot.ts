@@ -27,7 +27,7 @@ export class Bot {
         }
 
         this.manager = new Kazagumo({
-            defaultSearchEngine: "soundcloud",
+            defaultSearchEngine: process.env.DEFAULT_SEARCH_ENGINE || "soundcloud",
             send: (guildId, payload) => {
                 const guild = this.client.guilds.cache.get(guildId);
                 if (guild) guild.shard.send(payload);

@@ -27,7 +27,7 @@ export default {
             player.queue.clear();
             const stopEmbed = new EmbedBuilder()
                 .setColor(0xff0000)
-                .setDescription(`The queue has been cleared by${interaction.user.displayName}`)
+                .setDescription(`The queue has been cleared by ${interaction.user.displayName}`)
             await interaction.followUp({ embeds: [stopEmbed]});
         } catch (error) {
             await interaction.followUp("Oops, something went wrong. Please try again.");

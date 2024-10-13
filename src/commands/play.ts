@@ -14,36 +14,55 @@ export default {
         .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option
-                .setName('url')
-                .setDescription('Music link')
-                .setRequired(true)),
+                .setName('song')
+                .setDescription('Music link or search query')
+                .setRequired(true))
+        .addStringOption(option =>
+            option
+                .setName('source')
+                .setDescription('Select music source')
+                .setRequired(false)
+                .addChoices(
+                    { name: 'SoundCloud', value: 'soundcloud' },
+                    { name: 'Youtube', value: 'youtube' },
+                    { name: 'Youtube Music', value: 'youtube_music' },
+                )),
 
     async execute(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply({ ephemeral: false });
-        const query = interaction.options.getString('url', true);
+        const query = interaction.options.getString('song', true);
+        const source = interaction.options.getString('source');
 
         const kazagumo = bot.manager;
         const member = interaction.member as GuildMember;
-        const voiceChannel = member.voice.channel;
+        const { channel } = member.voice;
 
-        if (!voiceChannel) return interaction.followUp({ content: 'You are not in a voice channel!' });
+        if (!channel) return interaction.followUp("You need to be in a voice channel to use this command.");
 
-        const playerData = new Map<string, any>();
+        let player = kazagumo.players.get(interaction.guildId!);
 
-        let player = await kazagumo.createPlayer({
-            guildId: interaction.guildId!,
-            textId: interaction.channelId!,
-            voiceId: voiceChannel.id,
-            volume: 100,
-            deaf: true,
-            data: playerData
-        });
+        if (player && player.voiceId !== channel.id) {
+            // Bot is in a different voice channel
+            await interaction.followUp(`I'm already in a different voice channel. Please join <#${player.voiceId}> or disconnect me first.`);
+            return;
+        }
 
-        const botVoiceChannel = player.voiceId;
-        if (voiceChannel.id !== botVoiceChannel) return interaction.followUp({ content: 'I am in a different voice channel!' });
+        if (!player) {
+            player = await kazagumo.createPlayer({
+                guildId: interaction.guildId!,
+                textId: interaction.channelId!,
+                voiceId: channel.id,
+                volume: 100,
+                deaf: true,
+            });
+        }
 
-
-        let result = await kazagumo.search(query, { requester: interaction.member! });
+        let result;
+        if (source) {
+            result = await kazagumo.search(query, { requester: interaction.member!, engine: source });
+        } else {
+            result = await kazagumo.search(query, { requester: interaction.member! });
+        }
 
         if (!result.tracks.length) {
             return interaction.followUp("Sorry, nothing found.");

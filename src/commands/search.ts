@@ -1,20 +1,20 @@
 import {
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonStyle, ChatInputCommandInteraction,
-    GuildMember, Interaction,
-    InteractionContextType,
-    SlashCommandBuilder
+    ButtonStyle,
+    ChatInputCommandInteraction,
+    GuildMember,
+    Interaction,
+    SlashCommandBuilder,
+    StringSelectMenuBuilder
 } from "discord.js";
-import {PlayerState} from "kazagumo";
-import {bot} from "../index"
-
+import { PlayerState } from "kazagumo";
+import { bot } from "../index";
 
 export default {
     data: new SlashCommandBuilder()
         .setName("search")
         .setDescription("Search for music from your favorite platforms!")
-        .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option
                 .setName('query')
@@ -54,32 +54,38 @@ export default {
 
         if (!result.tracks.length) return interaction.followUp("Sorry, nothing found.");
 
-        const tracks = result.tracks.slice(0, 5); // Get top 5 results
+        const tracks = result.tracks.slice(0, 10); // Get top 10 results
 
         const embed = {
-            color: 0x00ff00,
-            title: 'Search Results',
-            description: tracks.map((track, i) => `${i + 1}. ${track.title}`).join('\n'),
-            footer: { text: 'Select a song using the buttons below.' }
+            color: 0xA020F0,
+            title: `Search Results for "${query}"`,
+            description: tracks.map((track, i) => `${i + 1}. [${track.title}](${track.realUri}) - ${track.author} - ${formatDuration(track.length ?? 0)}`).join('\n')
         };
 
-        const row = new ActionRowBuilder<ButtonBuilder>()
+        const selectMenu = new ActionRowBuilder<StringSelectMenuBuilder>()
             .addComponents(
-                ...tracks.map((_, i) =>
-                    new ButtonBuilder()
-                        .setCustomId(`select_${i}`)
-                        .setLabel(`${i + 1}`)
-                        .setStyle(ButtonStyle.Primary)
-                )
+                new StringSelectMenuBuilder()
+                    .setCustomId('song_select')
+                    .setPlaceholder('Select a song')
+                    .addOptions(tracks.map((track, index) => ({
+                        label: `${index + 1}. ${track.title}`.substring(0, 100),
+                        description: `${track.author} - ${formatDuration(track.length ?? 0)}`.substring(0, 100),
+                        value: index.toString()
+                    })))
             );
 
-        const message = await interaction.followUp({ embeds: [embed], components: [row] });
+        const message = await interaction.followUp({ embeds: [embed], components: [selectMenu] });
 
-        const filter = (i: Interaction) => i.isMessageComponent() && i.customId.startsWith('select_') && i.user.id === interaction.user.id;
-        const collector = message.createMessageComponentCollector({ filter, time: 15000 });
+        const collector = message.createMessageComponentCollector({ 
+            filter: (i) => i.customId === 'song_select' && i.user.id === interaction.user.id,
+            time: 30000
+        });
 
         collector.on('collect', async i => {
-            const selected = parseInt(i.customId.split('_')[1]);
+            if (!i.isStringSelectMenu()) return;
+            await i.deferUpdate();
+
+            const selected = parseInt(i.values[0]);
             const selectedTrack = tracks[selected];
 
             player.queue.add(selectedTrack);
@@ -89,18 +95,24 @@ export default {
             }
 
             const loadingEmbed = {
-                color: 0x00ff00,
+                color: 0xA020F0,
                 description: `**Added to queue:** ${selectedTrack.title}`
             };
 
-            await i.update({ embeds: [loadingEmbed], components: [] });
+            await i.editReply({ embeds: [loadingEmbed], components: [] });
             collector.stop();
         });
 
         collector.on('end', collected => {
             if (collected.size === 0) {
-                interaction.followUp('Search timed out. Please try again.');
+                interaction.followUp('Song selection timed out. Please try again.');
             }
         });
     }
 };
+
+function formatDuration(ms: number): string {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(0);
+    return `${minutes}:${(parseInt(seconds) < 10 ? '0' : '')}${seconds}`;
+}

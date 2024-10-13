@@ -4,8 +4,8 @@ import { bot } from "../index"
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("pauseresu")
-        .setDescription("Pause or Resume playback")
+        .setName("pause")
+        .setDescription("Pause playback")
         .setContexts(InteractionContextType.Guild),
 
     async execute(interaction: CommandInteraction) {
@@ -25,8 +25,7 @@ export default {
 
         try {
             if (player.paused) {
-                player.pause(false);
-                return interaction.followUp({ content: 'Playback resumed!' });
+                return interaction.followUp({ content: 'Playback is already paused!' });
             } else {
                 player.pause(true);
                 return interaction.followUp({ content: 'Playback paused!' });

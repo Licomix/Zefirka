@@ -4,18 +4,18 @@ import { bot } from "../index"
 
 export default {
     data: new SlashCommandBuilder()
-        .setName("instert-track")
+        .setName("playnext")
         .setDescription("Add track to the next position")
         .setContexts(InteractionContextType.Guild)
         .addStringOption(option =>
             option
-                .setName('url')
-                .setDescription('Music link')
+                .setName('song')
+                .setDescription('Music link or search query')
                 .setRequired(true)),
 
     async execute(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply();
-        const query = interaction.options.getString('url', true);
+        const query = interaction.options.getString('song', true);
 
         const kazagumo = bot.manager;
         const player = kazagumo.players.get(interaction.guildId!);

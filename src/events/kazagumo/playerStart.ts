@@ -23,34 +23,44 @@ export default {
             default: 0x00ff00,
         } as const;
 
-        const buttonEmojis = {
-            stop: bot.client.emojis.cache.find(emoji => emoji.name === "stopButton"),
-            skip: bot.client.emojis.cache.find(emoji => emoji.name === "skipButton"),
-            back: bot.client.emojis.cache.find(emoji => emoji.name === "lasttrackButton"),
-            playpause: bot.client.emojis.cache.find(emoji => emoji.name === "playpauseButton"),
-            loop: bot.client.emojis.cache.find(emoji => emoji.name === "loopButton"),
+        const platformIcons = {
+            youtube: 'https://i.imgur.com/xzVHhFY.png',
+            spotify: 'https://i.imgur.com/qvdqtsc.png',
+            soundcloud: 'https://i.imgur.com/MVnJ7mj.png',
+            applemusic: 'https://i.imgur.com/Wi0oyYm.png',
+            deezer: 'https://i.imgur.com/xyZ43FG.png',
+            jiosaavn: 'https://i.imgur.com/N9Nt80h.png',
+            default: 'https://thumbs2.imgbox.com/4f/9c/adRv6TPw_t.png'
         } as const;
 
-        type Platform = keyof typeof platformEmojis;
-        const platform: Platform = (track.sourceName in platformEmojis ? track.sourceName : 'default') as Platform;
+        const buttonEmojis = {
+            stop: '⏹️',
+            skip: '⏭️',
+            back: '⏮️',
+            playpause: '⏯️',
+            loop: '🔁',
+        };
 
-        const emoji = platformEmojis[platform] || '🎵';
-        const color = platformColors[platform];
+        type Platform = keyof typeof platformIcons;
+        const platform: Platform = (track.sourceName in platformIcons ? track.sourceName : 'default') as Platform;
+
+        const emoji = platformEmojis[platform as keyof typeof platformEmojis] || '🎵';
+        const color = platformColors[platform as keyof typeof platformColors] || platformColors.default;
+        const icon = platformIcons[platform];
 
         const playingEmbed = new EmbedBuilder()
+            .setAuthor({ name: 'Now Playing', iconURL: icon })
             .setColor(color)
-            .setTitle(`${emoji} Now Playing: ${track.title}`)
-            .setURL(track.realUri!)
+            .setDescription(`## [${track.title}](${track.realUri!})`)
             .addFields(
-                { name: '🎤 Artist', value: `${track.author}`, inline: true },
+                { name: '🎤 Artist', value: `\` ${track.author} \``, inline: true },
                 { name: '🎧 Requested by', value: `${trackRequester}`, inline: true },
-                { name: '⏱️ Duration', value: `${formatTime(track.length as number)}`, inline: true },
-                { name: '📅 Started at', value: `${new Date().toLocaleTimeString('pl-PL', { timeZone: 'Europe/Warsaw' })}`, inline: true }
+                { name: '⏱️ Duration', value: `\` ${formatTime(track.length as number)} \``, inline: true }
             )
             .setImage(track.thumbnail!)
             .setFooter({
-                text: `Now playing in ${voiceChannel.name}`,
-                iconURL: 'https://cdn-icons-png.flaticon.com/512/4472/4472584.png',
+                text: voiceChannel.name,
+                iconURL: bot.client.user?.displayAvatarURL() || undefined,
             });
 
 
@@ -59,28 +69,24 @@ export default {
                 new ButtonBuilder()
                 .setCustomId('stop')
                 .setStyle(ButtonStyle.Secondary)
-                .setEmoji(`${buttonEmojis["stop"]}`)
-                )
-            .addComponents(
+                .setEmoji(buttonEmojis.stop),
                 new ButtonBuilder()
                 .setCustomId('back')
-                .setEmoji(`${buttonEmojis["back"]}`)
-                .setStyle(ButtonStyle.Secondary))
-            .addComponents(
+                .setEmoji(buttonEmojis.back)
+                .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                 .setCustomId('pauseresu')
-                .setEmoji(`${buttonEmojis["playpause"]}`)
-                .setStyle(ButtonStyle.Secondary))
-            .addComponents(
+                .setEmoji(buttonEmojis.playpause)
+                .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                 .setCustomId('skip')
-                .setEmoji(`${buttonEmojis["skip"]}`)
-                .setStyle(ButtonStyle.Secondary))
-            .addComponents(
+                .setEmoji(buttonEmojis.skip)
+                .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                 .setCustomId('loop')
-                .setEmoji(`${buttonEmojis["loop"]}`)
-                .setStyle(ButtonStyle.Secondary))
+                .setEmoji(buttonEmojis.loop)
+                .setStyle(ButtonStyle.Secondary)
+            );
 
         try {
             const lastMessage = player.data.get("message") as Message;
