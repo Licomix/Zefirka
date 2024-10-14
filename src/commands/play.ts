@@ -83,8 +83,8 @@ export default {
         const loadingEmbed = {
             color: 0xA020F0,
             description: result.type === "PLAYLIST"
-                ? `**Added to queue:** ${result.playlistName}.`
-                : `**Added to queue:** ${result.tracks[0].title}.`
+                ? `🎶**Added to queue the playlist** ${result.playlistName} with \`${result.tracks.length}\` tracks.`
+                : `🎶**Added to queue:** ${result.tracks[0].title}.`
         };
 
         await interaction.followUp({ embeds: [loadingEmbed] });

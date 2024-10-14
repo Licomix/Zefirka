@@ -42,6 +42,7 @@ export default {
             } else if (oldState.channelId !== newState.channelId) {
                 // Bot moved to a different voice channel
                 const textChannel = bot.client.channels.cache.get(player.textId!);
+                player.setVoiceChannel(newState.channelId)
                 if (textChannel?.isTextBased() && 'send' in textChannel) {
                     await textChannel.send(`I moved to a different voice channel: <#${newState.channelId}>`);
                 }

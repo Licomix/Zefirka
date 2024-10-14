@@ -10,16 +10,13 @@ export default {
         const voiceChannel = bot.client.channels.cache.get(player.voiceId!) as VoiceChannel;
         const textChannel = bot.client.channels.cache.get(player.textId!) as TextChannel;
 
-        const platformEmojis = {
-            youtube: bot.client.emojis.cache.find(emoji => emoji.name === "youtube"),
-            spotify: bot.client.emojis.cache.find(emoji => emoji.name === "spotify"),
-            soundcloud: bot.client.emojis.cache.find(emoji => emoji.name === "soundcloud"),
-        } as const;
-
         const platformColors = {
             youtube: 0xff0000,
             spotify: 0x1DB954,
             soundcloud: 0xFF5500,
+            applemusic: 0xFB015B,
+            deezer:0xFF5E3A,
+            jiosaavn:0x008A78,
             default: 0x00ff00,
         } as const;
 
@@ -44,7 +41,6 @@ export default {
         type Platform = keyof typeof platformIcons;
         const platform: Platform = (track.sourceName in platformIcons ? track.sourceName : 'default') as Platform;
 
-        const emoji = platformEmojis[platform as keyof typeof platformEmojis] || '🎵';
         const color = platformColors[platform as keyof typeof platformColors] || platformColors.default;
         const icon = platformIcons[platform];
 
@@ -59,7 +55,7 @@ export default {
             )
             .setImage(track.thumbnail!)
             .setFooter({
-                text: voiceChannel.name,
+                text: `Channel: ${voiceChannel.name} | Queue Length: ${player.queue.length}`,
                 iconURL: bot.client.user?.displayAvatarURL() || undefined,
             });
 
