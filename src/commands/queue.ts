@@ -32,29 +32,26 @@ export default {
             const embed = new EmbedBuilder()
                 .setColor(0x0000ff)
                 .setTitle("Current Queue of Tracks")
-                .setDescription(`**Now playing:**\n${player.queue.current!.title}\n\n**Up next:**`)
                 .setThumbnail(player.queue.current!.thumbnail as string);
 
+            const currentTrack = player.queue.current
+
             let i = startIndex + 1;
+            let embedDescription = `**Now playing: [Click Me](${currentTrack!.uri})**\n\`${currentTrack!.title}\`\n**Upcoming Queue:\n**`
 
             for (const track of tracks) {
-                let trackTitle = track.title.substring(0, 35);
-                // let formattedTitle = `${trackTitle}${track.title.length > 50 ? '...' : ''}`;
-
-                embed.addFields(
-                    { name: `${i}. ${track.author}`, value: `${trackTitle}`, inline: false }
-                );
-
+                let trackTitle = track.title.substring(0, 30);
+                embedDescription += `\`${i}.\` **${track.author} - ${trackTitle}**\n`
                 i++;
             }
+            embed.setDescription(embedDescription)
             return embed;
         }
-
         let currentPage = 1;
 
         const embed = await createPageEmbed(player, player.queue, currentPage);
 
-        const totalPages = Math.ceil(player.queue.length / 10);
+        let totalPages = Math.ceil(player.queue.length / 10);
 
         const row = new ActionRowBuilder<ButtonBuilder>()
             .addComponents(
@@ -62,12 +59,16 @@ export default {
                     .setCustomId('prev')
                     .setLabel('⬅️ Previous')
                     .setStyle(ButtonStyle.Primary)
-                    .setDisabled(currentPage === 1), 
+                    .setDisabled(currentPage === 1),
                 new ButtonBuilder()
                     .setCustomId('next')
                     .setLabel('Next ➡️')
                     .setStyle(ButtonStyle.Primary)
-                    .setDisabled(currentPage >= totalPages), 
+                    .setDisabled(currentPage >= totalPages),
+                new ButtonBuilder()
+                    .setCustomId('clearQueue')
+                    .setLabel('🗑️')
+                    .setStyle(ButtonStyle.Danger),
             );
 
         const message = await interaction.followUp({ embeds: [embed], components: [row] });
@@ -83,11 +84,14 @@ export default {
                 currentPage -= 1;
             } else if (interaction.customId === "next" && currentPage < totalPages) {
                 currentPage += 1;
+            } else if (interaction.customId === "clearQueue") {
+                player.queue.clear();
+                totalPages = 0;
             }
 
             const newPageEmbed = await createPageEmbed(player, player.queue, currentPage);
-            
-            row.components[0].setDisabled(currentPage === 1); 
+
+            row.components[0].setDisabled(currentPage === 1);
             row.components[1].setDisabled(currentPage >= totalPages);
 
             await interaction.update({ embeds: [newPageEmbed], components: [row] });

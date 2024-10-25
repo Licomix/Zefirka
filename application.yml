@@ -1,6 +1,6 @@
 server: # REST and WS server
   port: 2333 # The port that the server listens on
-  address: 0.0.0.0
+  address: lavalink
   http2:
     enabled: false # Whether to enable HTTP/2 support
 plugins:

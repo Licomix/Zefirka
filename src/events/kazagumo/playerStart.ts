@@ -1,5 +1,5 @@
 import {Events, KazagumoPlayer, KazagumoTrack} from 'kazagumo';
-import {ActionRowBuilder, ActionRowComponent, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildMember, Message, TextChannel, VoiceChannel} from "discord.js";
+import {ActionRowBuilder, ActionRowComponent, ButtonBuilder, ButtonStyle, DiscordjsError, EmbedBuilder, GuildMember, Message, TextChannel, VoiceChannel} from "discord.js";
 import {bot} from "../../index";
 
 
@@ -84,16 +84,23 @@ export default {
                 .setStyle(ButtonStyle.Secondary)
             );
 
-        try {
             const lastMessage = player.data.get("message") as Message;
-            if (lastMessage){
-                await lastMessage.delete();
+            try {
+                if (lastMessage) {
+                    await lastMessage.delete();
+                }
+            } catch (error) {
+                if ((error as any).code === 10008) {  // Ошибка Discord: Unknown Message
+                    console.warn("Message does not exist in Discord.");
+                }
             }
-            const message = await textChannel.send({embeds: [playingEmbed],components: [row]});
-            player.data.set('message', message);
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
+
+            try {
+                const newMessage = await textChannel.send({embeds: [playingEmbed], components: [row]});
+                player.data.set('message', newMessage);
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
 
         bot.client.user?.setActivity({
             name: `${track.author} - ${track.title}`,

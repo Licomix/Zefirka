@@ -76,7 +76,7 @@ export default {
             player.queue.add(result.tracks[0]);
         }
 
-        if (!player.playing && !player.paused) {
+        if (!player.playing && !player.paused) {  
             await player.play();
         }
 
