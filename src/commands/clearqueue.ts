@@ -4,7 +4,7 @@ import { bot } from "../index"
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('empty')
+        .setName('clearqueue')
         .setDescription('Clear queue')
         .setContexts(InteractionContextType.Guild),
 
