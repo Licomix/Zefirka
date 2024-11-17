@@ -18,15 +18,17 @@ plugins:
       yandexmusic: false # Enable Yandex Music source
       flowerytts: false # Enable Flowery TTS source
       youtube: true # Enable YouTube search source (https://github.com/topi314/LavaSearch)
+      vkmusic: false # Enable Vk Music source
     lyrics-sources:
       spotify: false # Enable Spotify lyrics source
       deezer: false # Enable Deezer lyrics source
       youtube: false # Enable YouTube lyrics source
       yandexmusic: false # Enable Yandex Music lyrics source
+      vkmusic: false # Enable Vk Music lyrics source
     spotify:
       clientId: "your client id"
       clientSecret: "your client secret"
-      spDc: "your sp dc cookie" # the sp dc cookie used for accessing the spotify lyrics api
+#      spDc: "your sp dc cookie" # the sp dc cookie used for accessing the spotify lyrics api
       countryCode: "US" # the country code you want to use for filtering the artists top tracks. See https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
       playlistLoadLimit: 6 # The number of pages at 100 tracks each
       albumLoadLimit: 6 # The number of pages at 50 tracks each
@@ -66,14 +68,21 @@ plugins:
     # The clients to use for track loading. See below for a list of valid clients.
     # Clients are queried in the order they are given (so the first client is queried first and so on...)
     clients:
+      - ANDROID_MUSIC
       - MUSIC
       - WEB
-      - ANDROID_TESTSUITE
-      - ANDROID_MUSIC
+      - WEBEMBEDDED
       - TVHTML5EMBEDDED
+      - ANDROID_TESTSUITE
       - ANDROID_LITE
       - MEDIA_CONNECT
       - IOS
+      # This secure your lavalink is working and playing music if you used this two things below.
+      #oauth:
+      # enabled: true # IF YOU RUN YOUR LAVALINK CHECK YOUR CONSOLE AND CLICK THE GOOGLE.COM/DEVICES LINK AND THERE IS A CODE THAT YOU NEED TO PUT IN TO THE GOOGLE AND USE A BURNER ACCOUNT OR ALT ACCOUNT THERE IS A POSSIBLE CHANGE YOU CAN GET BANNED FROM GOOGLE OR YOUTUBE SO JUST USE A BURNER ACCOUNT IN CASE.
+    #pot:
+    #   token: "" # THIS REQUIRE INSTALLING https://github.com/iv-org/youtube-trusted-session-generator THIS IS A PYTHON FILE INSTALL THE REQUIREMENTS AND RUN PYTON INDEX FILE AND AFTER RUNNING YOU WILL RECIVE AND TOKEN AND VISTOR DATA AND PASTE IT BELOW.
+    #   visitorData: ""
 lavalink:
   plugins:
     - dependency: "com.github.topi314.lavasearch:lavasearch-plugin:1.0.0"
@@ -120,20 +129,20 @@ lavalink:
     youtubeSearchEnabled: true
     soundcloudSearchEnabled: true
     gc-warnings: true
-      #ratelimit:
-      #ipBlocks: ["1.0.0.0/8", "..."] # list of ip blocks
-      #excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink
-      #strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
-      #searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
-      #retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
-      #youtubeConfig: # Required for avoiding all age restrictions by YouTube, some restricted videos still can be played without.
-      #email: "your account mail" # Email of Google account
-      #password: "your account password" # Password of Google account
-      #httpConfig: # Useful for blocking bad-actors from ip-grabbing your music node and attacking it, this way only the http proxy will be attacked
-      #proxyHost: "localhost" # Hostname of the proxy, (ip or domain)
-      #proxyPort: 3128 # Proxy port, 3128 is the default for squidProxy
-    #proxyUser: "" # Optional user for basic authentication fields, leave blank if you don't use basic auth
-    #proxyPassword: "" # Password for basic authentication
+#    ratelimit:
+#      ipBlocks: ["1.0.0.0/8", "..."] # list of ip blocks
+#      excludedIps: ["...", "..."] # ips which should be explicit excluded from usage by lavalink
+#      strategy: "RotateOnBan" # RotateOnBan | LoadBalance | NanoSwitch | RotatingNanoSwitch
+#      searchTriggersFail: true # Whether a search 429 should trigger marking the ip as failing
+#      retryLimit: -1 # -1 = use default lavaplayer value | 0 = infinity | >0 = retry will happen this numbers times
+#    youtubeConfig: # Required for avoiding all age restrictions by YouTube, some restricted videos still can be played without.
+#      email: "your account mail" # Email of Google account
+#      password: "your account password" # Password of Google account
+#    httpConfig: # Useful for blocking bad-actors from ip-grabbing your music node and attacking it, this way only the http proxy will be attacked
+#      proxyHost: "localhost" # Hostname of the proxy, (ip or domain)
+#      proxyPort: 3128 # Proxy port, 3128 is the default for squidProxy
+#      proxyUser: "" # Optional user for basic authentication fields, leave blank if you don't use basic auth
+#      proxyPassword: "" # Password for basic authentication
 
 metrics:
   prometheus:

@@ -30,13 +30,27 @@ export default {
             default: 'https://thumbs2.imgbox.com/4f/9c/adRv6TPw_t.png'
         } as const;
 
-        const buttonEmojis = {
+        const defaultButtonEmojis = {
             stop: '⏹️',
             skip: '⏭️',
             back: '⏮️',
             playpause: '⏯️',
             loop: '🔁',
         };
+
+        // Uncomment and put your own emojis
+        const customButtonEmojis = {
+            // stop: '<:stopButton:1116616280120770620>',
+            // skip: '<:skipButton:1116616266472501248>',
+            // back: '<:lasttrackButton:1116616252799070238>',
+            // playpause: '<:playpauseButton:1116616237544382474>',
+            // loop: '<:loopButton:1116616290862370878>'
+        }
+
+        const buttonEmojis = {
+            ...defaultButtonEmojis,
+            ...customButtonEmojis,
+        }
 
         type Platform = keyof typeof platformIcons;
         const platform: Platform = (track.sourceName in platformIcons ? track.sourceName : 'default') as Platform;
@@ -84,23 +98,12 @@ export default {
                 .setStyle(ButtonStyle.Secondary)
             );
 
-            const lastMessage = player.data.get("message") as Message;
-            try {
-                if (lastMessage) {
-                    await lastMessage.delete();
-                }
-            } catch (error) {
-                if ((error as any).code === 10008) {  // Ошибка Discord: Unknown Message
-                    console.warn("Message does not exist in Discord.");
-                }
-            }
-
-            try {
-                const newMessage = await textChannel.send({embeds: [playingEmbed], components: [row]});
-                player.data.set('message', newMessage);
-            } catch (error) {
-                console.error('Error sending message:', error);
-            }
+        try {
+            const newMessage = await textChannel.send({embeds: [playingEmbed], components: [row]});
+            player.data.set('message', newMessage);
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
 
         bot.client.user?.setActivity({
             name: `${track.author} - ${track.title}`,
