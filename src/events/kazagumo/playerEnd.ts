@@ -8,7 +8,7 @@ export default {
     async execute(player: KazagumoPlayer, track: KazagumoTrack) {
         // Remove the "Now Playing" embed
         const lastMessage = player.data.get("message") as Message;
-        if (lastMessage) {
+        if (lastMessage && lastMessage.deletable) {
             try {
                 await lastMessage.delete();
             } catch (error) {
